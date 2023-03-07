@@ -1,0 +1,7 @@
+DatabricksDBFS
+| where ActionName == "unmount"
+| extend User = parse_json(Identity).email
+| extend Workspace = split(_ResourceId, "/")[-1]
+| extend MountPoint = tostring(parse_json(RequestParams).mountPoint)
+| order by TimeGenerated desc
+| project TimeGenerated, User, Workspace, MountPoint

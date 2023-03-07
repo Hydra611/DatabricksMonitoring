@@ -1,0 +1,7 @@
+DatabricksDBFS
+| where ActionName == "delete"
+| extend User = parse_json(Identity).email
+| extend Workspace = split(_ResourceId, "/")[-1]
+| extend FilePath = tostring(parse_json(RequestParams).path)
+| order by TimeGenerated desc
+| project TimeGenerated, User, Workspace, FilePath

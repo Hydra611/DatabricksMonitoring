@@ -1,0 +1,10 @@
+DatabricksDBFS
+| where ActionName == "mount"
+| extend User = parse_json(Identity).email
+| extend Workspace = split(_ResourceId, "/")[-1]
+| extend M = tostring(parse_json(RequestParams).mountPoint)
+| extend MountSource = split(split(M, "(", 1)[0], ",")[0]
+| extend MountPoint = split(split(M, "(", 1)[0], ",")[1]
+| extend MountType = split(M, ",",3)[0]
+| order by TimeGenerated desc
+| project TimeGenerated, User, Workspace, MountSource, MountPoint, MountType
