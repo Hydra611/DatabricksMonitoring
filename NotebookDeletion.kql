@@ -1,0 +1,9 @@
+DatabricksNotebook
+| where ActionName == "deleteNotebook"
+| extend User = parse_json(Identity).email
+| extend Workspace = split(_ResourceId, "/")[-1]
+| extend NotebookId = tostring(parse_json(RequestParams).notebookId)
+| extend NotebookName = tostring(parse_json(RequestParams).notebookName)
+| extend NotebookPath = tostring(parse_json(RequestParams).path)
+| order by TimeGenerated desc
+| project TimeGenerated, User, Workspace, NotebookId, NotebookName, NotebookPath
