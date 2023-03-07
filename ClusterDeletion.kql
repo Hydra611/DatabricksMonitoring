@@ -1,0 +1,14 @@
+DatabricksClusters
+| where ActionName == "permanentDelete"
+| extend User = parse_json(Identity).email
+| extend Workspace = split(_ResourceId, "/")[-1]
+| extend ClusterId = tostring(parse_json(RequestParams).cluster_id)
+| join (
+    DatabricksClusters
+    | where ActionName == "deleteResult"
+    | extend ClusterName = parse_json(RequestParams).clusterName
+    | extend ClusterId = tostring(parse_json(RequestParams).clusterId)
+    | project ClusterName, RequestParams, ClusterId)
+    on ClusterId
+| order by TimeGenerated desc
+| project TimeGenerated, User, Workspace, ClusterName, ClusterId
