@@ -1,7 +1,10 @@
 DatabricksJobs
 | where ActionName == "runStart"
+| extend Workspace = split(_ResourceId, "/")[-1]
 | extend JobId = tostring(parse_json(RequestParams).jobId)
 | extend JobName = parse_json(RequestParams).taskKey
+| extend TriggerType = tostring(parse_json(RequestParams).jobTriggerType)
+| extend ClusterType = tostring(parse_json(RequestParams).jobClusterType)
 | join (
     DatabricksJobs
     | where ActionName == "runSucceeded"
@@ -10,3 +13,11 @@ DatabricksJobs
     on JobId
 | order by TimeGenerated desc
 | project
+    TimeGenerated,
+    TimeGeneratedEnd,
+    Runtime =  TimeGeneratedEnd - TimeGenerated,
+    Workspace,
+    JobName,
+    JobId,
+    TriggerType,
+    ClusterType

@@ -9,4 +9,13 @@ DatabricksJobs
 | extend TriggerType = tostring(parse_json(RequestParams).jobTriggerType)
 | extend ClusterType = tostring(parse_json(RequestParams).jobClusterType)
 | order by TimeGenerated desc
-| project TimeGenerated, Workspace, JobName, JobId, StatusCode, ErrorMessage, TerminalState, TriggerType, ClusterType
+| project
+    TimeGenerated,
+    Workspace,
+    JobName,
+    JobId,
+    StatusCode,
+    ErrorMessage,
+    TerminalState,
+    TriggerType,
+    ClusterType
