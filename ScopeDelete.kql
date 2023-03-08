@@ -1,0 +1,8 @@
+DatabricksSecrets
+| where ActionName == "deleteScope"
+| extend User = parse_json(Identity).email
+| extend Workspace = split(_ResourceId, "/")[-1]
+| extend Scope = tostring(parse_json(RequestParams).scope)
+| extend Result = tostring(parse_json(Response).result)
+| order by TimeGenerated desc
+| project TimeGenerated, User, Workspace, Scope

@@ -8,7 +8,7 @@ DatabricksClusters
     | where ActionName == "deleteResult"
     | extend ClusterName = parse_json(RequestParams).clusterName
     | extend ClusterId = tostring(parse_json(RequestParams).clusterId)
-    | project ClusterName, RequestParams, ClusterId)
+    | project ClusterName, ClusterId)
     on ClusterId
 | order by TimeGenerated desc
 | project TimeGenerated, User, Workspace, ClusterName, ClusterId

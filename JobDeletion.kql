@@ -1,0 +1,14 @@
+DatabricksJobs
+| where ActionName == "delete"
+| extend Workspace = split(_ResourceId, "/")[-1]
+| extend User = parse_json(Identity).email
+| extend JobId = tostring(parse_json(RequestParams).job_id)
+| join (
+    DatabricksJobs
+    | where ActionName == "runStart"
+    | extend JobName = parse_json(RequestParams).taskKey
+    | extend JobId = tostring(parse_json(RequestParams).jobId)
+    | project JobName, JobId)
+    on JobId
+| order by TimeGenerated desc
+| project TimeGenerated, Workspace, User, JobName, JobId

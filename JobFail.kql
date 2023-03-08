@@ -1,0 +1,12 @@
+DatabricksJobs
+| where ActionName == "runFailed"
+| extend Workspace = split(_ResourceId, "/")[-1]
+| extend JobName = tostring(parse_json(RequestParams).taskKey)
+| extend JobId = tostring(parse_json(RequestParams).jobId)
+| extend StatusCode = tostring(parse_json(Response).statusCode)
+| extend ErrorMessage = tostring(parse_json(Response).errorMessage)
+| extend TerminalState = tostring(parse_json(RequestParams).jobTerminalState)
+| extend TriggerType = tostring(parse_json(RequestParams).jobTriggerType)
+| extend ClusterType = tostring(parse_json(RequestParams).jobClusterType)
+| order by TimeGenerated desc
+| project TimeGenerated, Workspace, JobName, JobId, StatusCode, ErrorMessage, TerminalState, TriggerType, ClusterType

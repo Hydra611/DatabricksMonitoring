@@ -1,0 +1,12 @@
+DatabricksJobs
+| where ActionName == "runStart"
+| extend JobId = tostring(parse_json(RequestParams).jobId)
+| extend JobName = parse_json(RequestParams).taskKey
+| join (
+    DatabricksJobs
+    | where ActionName == "runSucceeded"
+    | extend JobId = tostring(parse_json(RequestParams).jobId)
+    | project TimeGeneratedEnd = TimeGenerated, JobId)
+    on JobId
+| order by TimeGenerated desc
+| project

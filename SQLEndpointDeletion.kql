@@ -1,4 +1,4 @@
-DatabricksDatabricksSQL
+DatabricksSQL
 | where ActionName == "deleteEndpoint"
 | extend User = parse_json(Identity).email
 | extend Workspace = split(_ResourceId, "/")[-1]
