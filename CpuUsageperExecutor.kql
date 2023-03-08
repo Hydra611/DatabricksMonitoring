@@ -1,0 +1,16 @@
+SparkMetric_CL 
+| where name_s contains "executor.cpuTime"
+| extend sname=split(name_s, ".") 
+| extend executor=strcat(sname[0],".",sname[1])
+| project TimeGenerated, cpuTime=count_d/1000000, executor ,name_s 
+| join 
+    kind= inner 
+    (SparkMetric_CL 
+    | where name_s contains "executor.RunTime"
+    | extend sname=split(name_s, ".") 
+    | extend executor=strcat(sname[0],".",sname[1]) 
+    | project TimeGenerated, runTime=count_d,  executor ,name_s) 
+    on executor, TimeGenerated 
+| extend cpuUsage=(cpuTime/runTime)*100 
+| summarize ExecutorCpuTime = percentile(cpuUsage,90) by bin(TimeGenerated, 1m), executor 
+| order by TimeGenerated desc nulls last
