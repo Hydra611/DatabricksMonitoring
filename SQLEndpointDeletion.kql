@@ -1,7 +1,9 @@
 DatabricksSQL
 | where ActionName == "deleteEndpoint"
 | extend User = parse_json(Identity).email
+| extend Subscription = split(_ResourceId, "/")[2]
+| extend Ressourcegroup = split(_ResourceId, "/")[4]
 | extend Workspace = split(_ResourceId, "/")[-1]
 | extend EndpointId = tostring(parse_json(RequestParams).id)
 | order by TimeGenerated desc
-| project TimeGenerated, User, Workspace, EndpointId
+| project TimeGenerated, User, Subscription, Ressourcegroup, Workspace, EndpointId

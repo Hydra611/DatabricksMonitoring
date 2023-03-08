@@ -1,5 +1,7 @@
 DatabricksJobs
 | where ActionName == "runStart"
+| extend Subscription = split(_ResourceId, "/")[2]
+| extend Ressourcegroup = split(_ResourceId, "/")[4]
 | extend Workspace = split(_ResourceId, "/")[-1]
 | extend JobId = tostring(parse_json(RequestParams).jobId)
 | extend JobName = parse_json(RequestParams).taskKey
@@ -16,6 +18,8 @@ DatabricksJobs
     TimeGenerated,
     TimeGeneratedEnd,
     Runtime =  TimeGeneratedEnd - TimeGenerated,
+    Subscription,
+    Ressourcegroup,
     Workspace,
     JobName,
     JobId,

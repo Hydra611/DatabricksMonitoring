@@ -1,6 +1,8 @@
 DatabricksClusters
 | where ActionName == "permanentDelete"
 | extend User = parse_json(Identity).email
+| extend Subscription = split(_ResourceId, "/")[2]
+| extend Ressourcegroup = split(_ResourceId, "/")[4]
 | extend Workspace = split(_ResourceId, "/")[-1]
 | extend ClusterId = tostring(parse_json(RequestParams).cluster_id)
 | join (
@@ -11,4 +13,4 @@ DatabricksClusters
     | project ClusterName, ClusterId)
     on ClusterId
 | order by TimeGenerated desc
-| project TimeGenerated, User, Workspace, ClusterName, ClusterId
+| project TimeGenerated, User, Subscription, Ressourcegroup, Workspace, ClusterName, ClusterId

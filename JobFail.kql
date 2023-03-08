@@ -1,5 +1,7 @@
 DatabricksJobs
 | where ActionName == "runFailed"
+| extend Subscription = split(_ResourceId, "/")[2]
+| extend Ressourcegroup = split(_ResourceId, "/")[4]
 | extend Workspace = split(_ResourceId, "/")[-1]
 | extend JobName = tostring(parse_json(RequestParams).taskKey)
 | extend JobId = tostring(parse_json(RequestParams).jobId)
@@ -11,6 +13,8 @@ DatabricksJobs
 | order by TimeGenerated desc
 | project
     TimeGenerated,
+    Subscription,
+    Ressourcegroup,
     Workspace,
     JobName,
     JobId,
