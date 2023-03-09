@@ -1,3 +1,4 @@
+// Possible Alert:
 DatabricksJobs
 | where ActionName == "delete"
 | extend Subscription = split(_ResourceId, "/")[2]

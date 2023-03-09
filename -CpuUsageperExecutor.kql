@@ -1,3 +1,4 @@
+// Possible Alert:
 SparkMetric_CL 
 | where name_s contains "executor.cpuTime"
 | extend sname=split(name_s, ".") 

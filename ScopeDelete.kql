@@ -1,3 +1,4 @@
+// Possible Alert:
 DatabricksSecrets
 | where ActionName == "deleteScope"
 | extend User = parse_json(Identity).email

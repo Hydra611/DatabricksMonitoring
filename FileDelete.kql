@@ -1,3 +1,4 @@
+// Possible Alert:
 DatabricksDBFS
 | where ActionName == "delete"
 | extend User = parse_json(Identity).email
