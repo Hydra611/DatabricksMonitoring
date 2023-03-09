@@ -1,0 +1,5 @@
+// DatabricksClusterLibraries should exist as table, but is empty in my environment
+// Approach with Spark Monitoring Library shows attached libraries at cluster and might be useful to work against a predefined list of libraries & with ClusterID and the DatabricksClusters table, the corresponding RessourceID can be extracted
+SparkLoggingEvent_CL
+| where Message contains "library" and  logger_name_s == "com.databricks.backend.daemon.driver.LibraryState"
+| order by TimeGenerated desc 

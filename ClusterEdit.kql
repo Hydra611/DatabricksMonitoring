@@ -1,0 +1,54 @@
+DatabricksClusters
+| where ActionName == "edit"
+| extend User = parse_json(Identity).email
+| extend Subscription = split(_ResourceId, "/")[2]
+| extend Ressourcegroup = split(_ResourceId, "/")[4]
+| extend Workspace = split(_ResourceId, "/")[-1]
+| extend ClusterId = tostring(parse_json(RequestParams).cluster_id)
+| extend ClusterName = parse_json(RequestParams).cluster_name
+| extend Availability = parse_json(tostring(parse_json(RequestParams).azure_attributes)).availability
+| extend MinWorkers = parse_json(tostring(parse_json(RequestParams).autoscale)).min_workers
+| extend MaxWorkers = parse_json(tostring(parse_json(RequestParams).autoscale)).max_workers
+| extend AutoTerminationMinutes = parse_json(RequestParams).autotermination_minutes
+| extend AccessMode = parse_json(RequestParams).data_security_mode
+| extend DriverType = parse_json(RequestParams).driver_node_type_id
+| extend NodeType = parse_json(RequestParams).node_type_id
+| extend RuntimeEngine = parse_json(RequestParams).runtime_engine
+| extend SparkVersion = parse_json(RequestParams).spark_version
+| union
+    (DatabricksClusters
+    | where ActionName == "create"
+    | extend User = parse_json(Identity).email
+    | extend Subscription = split(_ResourceId, "/")[2]
+    | extend Ressourcegroup = split(_ResourceId, "/")[4]
+    | extend Workspace = split(_ResourceId, "/")[-1]
+    | extend ClusterId = tostring(parse_json(tostring(parse_json(Response).result)).cluster_id)
+    | extend ClusterName = parse_json(RequestParams).cluster_name
+    | extend Availability = parse_json(tostring(parse_json(RequestParams).azure_attributes)).availability
+    | extend MinWorkers = parse_json(tostring(parse_json(RequestParams).autoscale)).min_workers
+    | extend MaxWorkers = parse_json(tostring(parse_json(RequestParams).autoscale)).max_workers
+    | extend AutoTerminationMinutes = parse_json(RequestParams).autotermination_minutes
+    | extend AccessMode = parse_json(RequestParams).data_security_mode
+    | extend DriverType = parse_json(RequestParams).driver_node_type_id
+    | extend NodeType = parse_json(RequestParams).node_type_id
+    | extend RuntimeEngine = parse_json(RequestParams).runtime_engine
+    | extend SparkVersion = parse_json(RequestParams).spark_version)
+| order by tostring(ClusterId), TimeGenerated desc
+| distinct
+    TimeGenerated,
+    tostring(User),
+    tostring(Subscription),
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(ClusterName),
+    tostring(ClusterId),
+    tostring(ActionName),
+    tostring(Availability),
+    tostring(MinWorkers),
+    tostring(MaxWorkers),
+    tostring(AutoTerminationMinutes),
+    tostring(AccessMode),
+    tostring(DriverType),
+    tostring(NodeType),
+    tostring(RuntimeEngine),
+    tostring(SparkVersion)
