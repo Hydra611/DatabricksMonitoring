@@ -1,4 +1,4 @@
-// Possible Alert:
+// Possible Alert: Runtime over specific limit in specific time period for specific job, enhanced with variable via "let", which contains the runtime
 DatabricksJobs
 | where ActionName == "runStart"
 | extend Subscription = split(_ResourceId, "/")[2]

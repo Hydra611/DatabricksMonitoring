@@ -1,4 +1,4 @@
-// Possible Alert:
+// Possible Alert: Count of rows >=1 in specific time period (e.g. aggregated and checked every 10 minutes)
 DatabricksJobs
 | where ActionName == "runFailed"
 | extend Subscription = split(_ResourceId, "/")[2]
