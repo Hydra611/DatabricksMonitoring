@@ -1,0 +1,10 @@
+{
+    "databricks.connection.default.apiRootUrl": "https://adb-385358636871246.6.azuredatabricks.net/",
+    "databricks.connection.default.displayName": "Adesso Playground",
+    "databricks.connection.default.localSyncFolder": "C:\\Users\\zaunbrecher\\Documents\\mySynch",
+    "databricks.lastActiveConnection": "Adesso Playground",
+    "jupyter.codeRegularExpression": "^(#\\s*COMMAND\\s*[-]*|#\\s*%%|#\\s*\\<codecell\\>|#\\s*In\\[\\d*?\\]|#\\s*In\\[ \\])",
+    "databricks.connection.default.personalAccessTokenSecure": {
+        "keyTarSettingName": "Adesso Playground-API-Token"
+    }
+}
