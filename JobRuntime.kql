@@ -8,12 +8,18 @@ DatabricksJobs
 | extend JobName = parse_json(RequestParams).taskKey
 | extend TriggerType = tostring(parse_json(RequestParams).jobTriggerType)
 | extend ClusterType = tostring(parse_json(RequestParams).jobClusterType)
+| extend ClusterId = tostring(parse_json(RequestParams).clusterId)
 | join (
     DatabricksJobs
     | where ActionName == "runSucceeded"
     | extend JobId = tostring(parse_json(RequestParams).jobId)
     | project TimeGeneratedEnd = TimeGenerated, JobId)
     on JobId
+| join (
+    DatabricksClusters
+    | extend ClusterId = tostring(parse_json(RequestParams).clusterId)
+    | extend ClusterName = parse_json(RequestParams).clusterName)
+    on ClusterId
 | order by TimeGenerated desc
 | project
     TimeGenerated,
@@ -25,4 +31,6 @@ DatabricksJobs
     JobName,
     JobId,
     TriggerType,
-    ClusterType
+    ClusterType,
+    ClusterId,
+    ClusterName
