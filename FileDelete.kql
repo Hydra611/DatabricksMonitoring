@@ -7,4 +7,10 @@ DatabricksDBFS
 | extend Workspace = split(_ResourceId, "/")[-1]
 | extend FilePath = tostring(parse_json(RequestParams).path)
 | order by TimeGenerated desc
-| distinct TimeGenerated, tostring(User), tostring(Subscription), tostring(Ressourcegroup), tostring(Workspace), tostring(FilePath)
+| distinct
+    TimeGenerated,
+    tostring(User),
+    tostring(Subscription),
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(FilePath)
