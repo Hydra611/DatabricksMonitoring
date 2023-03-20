@@ -1,4 +1,16 @@
 // Possible Alert: Count of rows >=1 in specific time period (e.g. aggregated and checked every 10 minutes)
+let ActiveConfigs = DatabricksClusters
+    | where ActionName == "edit"
+    | extend User = parse_json(Identity).email
+    | extend ClusterId = tostring(parse_json(RequestParams).cluster_id)
+    | union
+        (DatabricksClusters
+        | where ActionName == "create"
+        | extend User = parse_json(Identity).email
+        | extend ClusterId = tostring(parse_json(tostring(parse_json(Response).result)).cluster_id))
+    | summarize arg_max(TimeGenerated, ClusterId)
+        by ClusterId
+    | project tostring(CheckID = strcat(TimeGenerated, " - ", ClusterId));
 DatabricksClusters
 | where ActionName == "edit"
 | extend User = parse_json(Identity).email
@@ -16,6 +28,7 @@ DatabricksClusters
 | extend NodeType = parse_json(RequestParams).node_type_id
 | extend RuntimeEngine = parse_json(RequestParams).runtime_engine
 | extend SparkVersion = parse_json(RequestParams).spark_version
+| extend Active = iff((strcat(TimeGenerated, " - ", ClusterId) in (ActiveConfigs)), "True", "False")
 | union
     (DatabricksClusters
     | where ActionName == "create"
@@ -34,6 +47,7 @@ DatabricksClusters
     | extend NodeType = parse_json(RequestParams).node_type_id
     | extend RuntimeEngine = parse_json(RequestParams).runtime_engine
     | extend SparkVersion = parse_json(RequestParams).spark_version)
+| extend Active = iff((strcat(TimeGenerated, " - ", ClusterId) in (ActiveConfigs)), "True", "False")
 | distinct
     TimeGenerated,
     tostring(User),
@@ -42,6 +56,7 @@ DatabricksClusters
     tostring(Workspace),
     tostring(ClusterName),
     tostring(ClusterId),
+    tostring(Active),
     tostring(ActionName),
     tostring(Availability),
     tostring(MinWorkers),
