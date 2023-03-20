@@ -10,4 +10,12 @@ DatabricksDBFS
 | extend MountPoint = split(split(M, "(", 1)[0], ",")[1]
 | extend MountType = split(M, ",", 3)[0]
 | order by TimeGenerated desc
-| project TimeGenerated, User, Subscription, Ressourcegroup, Workspace, MountSource, MountPoint, MountType
+| distinct
+    TimeGenerated,
+    tostring(User),
+    tostring(Subscription),
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(MountSource),
+    tostring(MountPoint),
+    tostring(MountType)

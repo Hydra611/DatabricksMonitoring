@@ -14,4 +14,4 @@ DatabricksJobs
     | project JobName, JobId)
     on JobId
 | order by TimeGenerated desc
-| project TimeGenerated, Subscription, Ressourcegroup, Workspace, User, JobName, JobId
+| distinct TimeGenerated, tostring(Subscription), tostring(Ressourcegroup), tostring(Workspace), tostring(User), tostring(JobName), tostring(JobId)
