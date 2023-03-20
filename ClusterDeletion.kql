@@ -1,7 +1,7 @@
 // Possible Alert: Count of rows >=1 in specific time period (e.g. aggregated and checked every 10 minutes)
 DatabricksClusters
 | where ActionName == "permanentDelete"
-| extend User = parse_json(Identity).email
+| extend DeletedByUser = parse_json(Identity).email
 | extend Subscription = split(_ResourceId, "/")[2]
 | extend Ressourcegroup = split(_ResourceId, "/")[4]
 | extend Workspace = split(_ResourceId, "/")[-1]
@@ -13,5 +13,19 @@ DatabricksClusters
     | extend ClusterId = tostring(parse_json(RequestParams).clusterId)
     | project ClusterName, ClusterId)
     on ClusterId
+| join (
+    DatabricksClusters
+    | where ActionName == "createResult"
+    | extend CreatedByUser = parse_json(Identity).email
+    | extend ClusterId = tostring(parse_json(RequestParams).clusterId))
+    on ClusterId
 | order by TimeGenerated desc
-| project TimeGenerated, User, Subscription, Ressourcegroup, Workspace, ClusterName, ClusterId
+| project
+    TimeGenerated,
+    DeletedByUser,
+    CreatedByUser,
+    Subscription,
+    Ressourcegroup,
+    Workspace,
+    ClusterName,
+    ClusterId
