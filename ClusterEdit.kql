@@ -13,6 +13,7 @@ let ActiveConfigs = DatabricksClusters
     | project tostring(CheckID = strcat(TimeGenerated, " - ", ClusterId));
 DatabricksClusters
 | where ActionName == "edit"
+| where parse_json(RequestParams).cluster_creator != "SQL_SERVICE"
 | extend User = parse_json(Identity).email
 | extend Subscription = split(_ResourceId, "/")[2]
 | extend Ressourcegroup = split(_ResourceId, "/")[4]
@@ -32,6 +33,7 @@ DatabricksClusters
 | union
     (DatabricksClusters
     | where ActionName == "create"
+    | where parse_json(RequestParams).cluster_creator != "SQL_SERVICE"
     | extend User = parse_json(Identity).email
     | extend Subscription = split(_ResourceId, "/")[2]
     | extend Ressourcegroup = split(_ResourceId, "/")[4]
