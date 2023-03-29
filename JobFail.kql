@@ -14,13 +14,13 @@ DatabricksJobs
 | order by TimeGenerated desc
 | project
     TimeGenerated,
-    Subscription,
-    Ressourcegroup,
-    Workspace,
-    JobName,
-    JobId,
-    StatusCode,
-    ErrorMessage,
-    TerminalState,
-    TriggerType,
-    ClusterType
+    tostring(Subscription)
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(JobName),
+    tostring(JobId),
+    tostring(StatusCode),
+    tostring(ErrorMessage),
+    tostring(TerminalState),
+    tostring(TriggerType),
+    tostring(ClusterType)

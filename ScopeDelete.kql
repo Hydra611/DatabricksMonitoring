@@ -8,4 +8,10 @@ DatabricksSecrets
 | extend Scope = tostring(parse_json(RequestParams).scope)
 | extend Result = tostring(parse_json(Response).result)
 | order by TimeGenerated desc
-| project TimeGenerated, User, Subscription, Ressourcegroup, Workspace, Scope
+| project
+    TimeGenerated,
+    tostring(User),
+    tostring(Subscription),
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(Scope)

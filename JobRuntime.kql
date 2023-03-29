@@ -24,13 +24,13 @@ DatabricksJobs
 | project
     TimeGenerated,
     TimeGeneratedEnd,
-    Runtime =  TimeGeneratedEnd - TimeGenerated,
-    Subscription,
-    Ressourcegroup,
-    Workspace,
-    JobName,
-    JobId,
-    TriggerType,
-    ClusterType,
-    ClusterId,
-    ClusterName
+    tostring(Runtime) =  TimeGeneratedEnd - TimeGenerated,
+    tostring(Subscription),
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(JobName),
+    tostring(JobId),
+    tostring(TriggerType),
+    tostring(ClusterType),
+    tostring(ClusterId),
+    tostring(ClusterName)

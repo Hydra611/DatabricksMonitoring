@@ -9,4 +9,12 @@ DatabricksNotebook
 | extend NotebookName = tostring(parse_json(RequestParams).notebookName)
 | extend NotebookPath = tostring(parse_json(RequestParams).path)
 | order by TimeGenerated desc
-| project TimeGenerated, User, Subscription, Ressourcegroup, Workspace, NotebookId, NotebookName, NotebookPath
+| project
+    TimeGenerated,
+    tostring(User),
+    tostring(Subscription),
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(NotebookId),
+    tostring(NotebookName),
+    tostring(NotebookPath)

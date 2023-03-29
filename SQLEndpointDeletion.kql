@@ -7,4 +7,10 @@ DatabricksSQL
 | extend Workspace = split(_ResourceId, "/")[-1]
 | extend EndpointId = tostring(parse_json(RequestParams).id)
 | order by TimeGenerated desc
-| project TimeGenerated, User, Subscription, Ressourcegroup, Workspace, EndpointId
+| project
+    TimeGenerated,
+    tostring(User),
+    tostring(Subscription),
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(EndpointId)

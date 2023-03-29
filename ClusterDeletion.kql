@@ -22,10 +22,10 @@ DatabricksClusters
 | order by TimeGenerated desc
 | project
     TimeGenerated,
-    DeletedByUser,
-    CreatedByUser,
-    Subscription,
-    Ressourcegroup,
-    Workspace,
-    ClusterName,
-    ClusterId
+    tostring(DeletedByUser),
+    tostring(CreatedByUser),
+    tostring(Subscription),
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(ClusterName),
+    tostring(ClusterId)
