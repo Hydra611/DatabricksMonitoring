@@ -7,4 +7,13 @@ DatabricksPartnerHub
 | extend ComputeType = tostring(parse_json(RequestParams).compute_type)
 | extend PartnerName = tostring(parse_json(RequestParams).partner_name)
 | order by TimeGenerated desc
-| project TimeGenerated, User, ActionName, Subscription, Ressourcegroup, Workspace, UserAgentIp, ComputeType, PartnerName
+| project
+    TimeGenerated,
+    tostring(User),
+    tostring(ActionName),
+    tostring(Subscription),
+    tostring(Ressourcegroup),
+    tostring(Workspace),
+    tostring(UserAgentIp),
+    tostring(ComputeType),
+    tostring(PartnerName)
