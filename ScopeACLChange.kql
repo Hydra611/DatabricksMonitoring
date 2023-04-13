@@ -18,4 +18,5 @@ DatabricksSecrets
     tostring(Workspace),
     tostring(Scope),
     tostring(Principal),
+    tostring(ActionName),
     tostring(Permission)
